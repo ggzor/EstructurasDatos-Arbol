@@ -56,7 +56,15 @@ int main()
               << "  2. Mostrar InOrden.\n"
               << "  3. Mostrar PostOrden.\n"
               << "  4. Mostrar hijos de un nodo. \n"
-              << "  5. Salir. \n"
+              << "  5. Lista nodos hoja.\n"
+              << "  6. Hallar hermano de un nodo. \n"
+              << "  7. Hallar el padre de un nodo. \n"
+              << "  8. Lista descendientes de un nodo. \n"
+              << "  9. Camino de un nodo N a un nodo M. \n "
+              << " 10. Altura desde un nodo. \n"
+              << " 11. Peso del arbol. \n "
+              << " 12. ¿Es un arbol lleno? \n"
+              << " 13. Salir. \n"
               << std::endl;
     std::cout << "Opción: ";
     std::cin >> op;
@@ -180,10 +188,67 @@ int main()
           std::cout << terminarColor << std::endl;
         }
       }
-      esperarEnter();
+     
+      esperarEnter(); 
+      break;
+    case 5:
+      //Imprime los nodos hoja del arbol
+      if (arbol.estaVacio())
+      {
+        std::cout << acentuar << "El árbol está vacío." << terminarColor << std::endl;
+      }
+      else
+      {
+
+      }
+
       break;
 
-    case 5:
+    case 6:
+    //Halla el hermano de un nodo N
+    if (arbol.estaVacio())
+      {
+        std::cout << acentuar << "El árbol está vacío." << terminarColor << std::endl;
+      }
+      else
+      {
+        
+      }
+       esperarEnter(); 
+      break;
+      
+    case 7:
+    //Hallar el padre de un nodo N
+      esperarEnter(); 
+      break;
+      
+    case 8:
+    //Lista descendientes de un nodo
+      esperarEnter(); 
+      break;
+      
+    case 9:
+    //Lista un camino de un nodo N a un nodo M
+      esperarEnter(); 
+      break;
+      
+    case 10:
+    //Calcula la altura del arbol
+      esperarEnter(); 
+      break;
+
+    case 11:
+    //Calcula el peso del arbol
+      esperarEnter(); 
+      break;
+       
+    case 12:
+    //Determina si el arbol es lleno
+
+    
+      esperarEnter(); 
+      break;
+    case 13:
       // Para evitar el siguiente mensaje
       break;
 
@@ -192,7 +257,7 @@ int main()
       esperarEnter();
       break;
     }
-  } while (op != 5);
+  } while (op != 13);
 
   return 0;
 }

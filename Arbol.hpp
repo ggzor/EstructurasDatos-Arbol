@@ -112,6 +112,49 @@ class Arbol
       return raiz == nullptr;
     }
 
+
+    /**
+     * Regresa todos los nodos hoja del árbol, realizando
+     */
+    Lista<NodoArbol<T> *> obtenerHojas() {
+      Lista<NodoArbol<T> *> resultado;
+
+      auto recorrido = recorrerEnOrden();
+      for (NodoArbol<T> *nodo : recorrido)
+      {
+        if (nodo->derecha == nullptr && nodo->izquierda == nullptr)
+        {
+          resultado.insertarFinal(nodo);
+        }
+      }
+
+      return resultado;
+    } 
+
+    /**
+     * Regresa el hermano de un nodo, delega la búsqueda al método recursivo.
+     */
+    NodoArbol<T> *obtenerHermano(T valor)
+    {
+      if (raiz != nullptr)
+      {
+        // La raíz no tiene hermanos
+        if (raiz->valor == valor)
+        {
+          return nullptr;
+        }
+        else
+        {
+          // Delegar a metodo recursivo
+          return obtenerHermano(raiz, valorNodo);
+        }
+      }
+      else
+      {
+        return nullptr;
+      }
+    }
+
   private:
     /**
      * Inserta un elemento en el árbol dependiendo de su orden con respecto a los otros nodos.
@@ -209,6 +252,41 @@ class Arbol
         recorrerPostOrden(nodo->izquierda, resultado);
         recorrerPostOrden(nodo->derecha, resultado);
         resultado.insertarFinal(nodo);
+      }
+    }
+
+    /**
+     * Regresa el hermano de un nodo, delega la búsqueda al método recursivo.
+     */
+    NodoArbol<T> *obtenerHermano(NodoArbol<T> *nodo, T valor)
+    {
+      if (nodo != nullptr)
+      {
+        if (nodo->izquierda != nullptr && nodo->izquierda->valor == valor)
+        {
+          return nodo->derecha;
+        }
+        else if (nodo->derecha != nullptr && nodo->derecha->valor == valor)
+        {
+          return nodo->izquierda;
+        }
+        else
+        {
+          auto resultadoIzquierda = obtenerHermano(nodo->izquierda, valor);
+
+          if (resultadoIzquierda != nullptr)
+          {
+            return resultadoIzquierda;
+          }
+          else
+          {
+            return obtenerHermano(nodo->derecha, valor);
+          }
+        }
+      }
+      else
+      {
+        return nullptr;
       }
     }
 };
