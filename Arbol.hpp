@@ -17,6 +17,7 @@
 #if !defined(_ARBOL_HPP_)
 #define _ARBOL_HPP_
 
+#include <cmath>
 #include <ostream>
 #include "Lista.hpp"
 
@@ -146,13 +147,115 @@ class Arbol
         else
         {
           // Delegar a metodo recursivo
-          return obtenerHermano(raiz, valorNodo);
+          return obtenerHermano(raiz, valor);
         }
       }
       else
       {
         return nullptr;
       }
+    }
+
+    /**
+     * Expone la raíz del árbol.
+     */
+    NodoArbol<T> *obtenerRaiz() {
+      return raiz;
+    }
+
+    /**
+     * Obtiene el padre de un nodo con el valor especificado
+     */
+    NodoArbol<T> *obtenerPadre(T valor)
+    {
+      if (raiz != nullptr)
+      {
+        if (raiz->valor == valor)
+        {
+          // La raíz no tiene padre
+          return nullptr;
+        }
+        else
+        {
+          // Delegar a método recursivo
+          return obtenerPadre(raiz, valor);
+        }
+      }
+      else
+      {
+        return nullptr;
+      }
+    }
+
+    /**
+     * Obtiene los descendientes de un nodo
+     */
+    Lista<NodoArbol<T> *> obtenerDescendientes(T valor)
+    {
+      Lista<NodoArbol<T> *> resultadoFinal;
+      Lista<NodoArbol<T> *> resultado;
+      auto nodo = buscarNodo(valor);
+
+      if (nodo == nullptr)
+      {
+        // El nodo no está en el árbol
+        return resultado;
+      }
+      else
+      {
+        // Realizar un recorrido para llenarla con los resultados desde este nodo
+        recorrerEnOrden(nodo, resultado);
+
+        for (auto nodo : resultado)
+        {
+          if (nodo->valor != valor)
+          {
+            resultadoFinal.insertarFinal(nodo);
+          }
+        }
+
+        return resultadoFinal;
+      }
+    }
+
+    /**
+     * Obtiene la altura desde un nodo
+     */
+    int obtenerAltura(T valor)
+    {
+      auto nodo = buscarNodo(valor);
+
+      if (nodo != nullptr)
+      {
+        return obtenerAltura(nodo);
+      }
+      else
+      {
+        return -1;
+      }
+    }
+
+    /**
+     * Obtener la altura total
+     */
+    int obtenerAlturaTotal()
+    {
+      return obtenerAltura(raiz);
+    }
+
+    /**
+     * Obtiene el peso total del árbol
+     */
+    int obtenerPeso() {
+      auto recorrido = recorrerPostOrden();
+      return recorrido.obtenerLongitud();
+    }
+
+    /**
+     * Verifica si el arbol es lleno
+     */
+    bool esLleno() {
+      return std::pow(2, obtenerAlturaTotal() + 1) - 1 == obtenerPeso();
     }
 
   private:
@@ -287,6 +390,55 @@ class Arbol
       else
       {
         return nullptr;
+      }
+    }
+
+    /**
+     * Obtiene el padre de un nodo con el valor especificado
+     */
+    NodoArbol<T> *obtenerPadre(NodoArbol<T> *nodo, T valor)
+    {
+      if (nodo != nullptr)
+      {
+        if (nodo->izquierda != nullptr && nodo->izquierda->valor == valor)
+        {
+          return nodo;
+        }
+        else if (nodo->derecha != nullptr && nodo->derecha->valor == valor)
+        {
+          return nodo;
+        }
+        else
+        {
+          auto resultadoIzquierda = obtenerPadre(nodo->izquierda, valor);
+
+          if (resultadoIzquierda != nullptr)
+          {
+            return resultadoIzquierda;
+          }
+          else
+          {
+            return obtenerPadre(nodo->derecha, valor);
+          }
+        }
+      }
+      else
+      {
+        return nullptr;
+      }
+    }
+
+    /**
+     * Método recursivo para obtener la altura de un árbol
+     */
+    int obtenerAltura(NodoArbol<T> *nodo) {
+      if (nodo == nullptr) 
+      {
+        return 0;
+      } else if (nodo->izquierda == nullptr && nodo->derecha == nullptr) {
+        return 0;
+      } else {
+        return std::max(obtenerAltura(nodo->izquierda), obtenerAltura(nodo->derecha)) + 1;
       }
     }
 };

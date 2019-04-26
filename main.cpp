@@ -52,19 +52,19 @@ int main()
     limpiarTerminal();
     std::cout << arbol << std::endl;
     std::cout << "Menú:\n"
-              << "  1. Mostrar PreOrden. \n"
+              << "  1. Mostrar PreOrden.\n"
               << "  2. Mostrar InOrden.\n"
               << "  3. Mostrar PostOrden.\n"
-              << "  4. Mostrar hijos de un nodo. \n"
+              << "  4. Mostrar hijos de un nodo.\n"
               << "  5. Lista nodos hoja.\n"
-              << "  6. Hallar hermano de un nodo. \n"
-              << "  7. Hallar el padre de un nodo. \n"
-              << "  8. Lista descendientes de un nodo. \n"
-              << "  9. Camino de un nodo N a un nodo M. \n "
-              << " 10. Altura desde un nodo. \n"
-              << " 11. Peso del arbol. \n "
-              << " 12. ¿Es un arbol lleno? \n"
-              << " 13. Salir. \n"
+              << "  6. Hallar hermano de un nodo.\n"
+              << "  7. Hallar el padre de un nodo.\n"
+              << "  8. Lista descendientes de un nodo.\n"
+              << "  9. Camino de un nodo N a un nodo M.\n"
+              << " 10. Altura de un nodo.\n"
+              << " 711. Peso del árbol.\n"
+              << " 12. ¿Es un árbol lleno?\n"
+              << " 13. Salir.\n"
               << std::endl;
     std::cout << "Opción: ";
     std::cin >> op;
@@ -159,7 +159,7 @@ int main()
         {
           std::cout << acentuar << "No se encontró el valor en el árbol." << terminarColor << std::endl;
         }
-        else 
+        else
         {
           std::cout << "Los hijos del nodo son: " << std::endl;
 
@@ -188,8 +188,8 @@ int main()
           std::cout << terminarColor << std::endl;
         }
       }
-     
-      esperarEnter(); 
+
+      esperarEnter();
       break;
     case 5:
       //Imprime los nodos hoja del arbol
@@ -199,54 +199,207 @@ int main()
       }
       else
       {
+        // Obtener nodos hoja de un árbol
+        auto hojas = arbol.obtenerHojas();
+        std::cout << "Las hojas del árbol son: "
+                  << colorVertice << enNegritas;
+        for (auto nodo : hojas)
+        {
+          std::cout << nodo->valor << ' ';
+        }
 
+        std::cout << terminarColor << std::endl;
       }
-
+      esperarEnter();
       break;
-
     case 6:
-    //Halla el hermano de un nodo N
-    if (arbol.estaVacio())
+      //Halla el hermano de un nodo N
+      if (arbol.estaVacio())
       {
         std::cout << acentuar << "El árbol está vacío." << terminarColor << std::endl;
       }
       else
       {
-        
+        int valor;
+        std::cout << "Valor: " << colorVertice;
+        std::cin >> valor;
+        std::cout << terminarColor;
+
+        auto nodo = arbol.buscarNodo(valor);
+        if (nodo == nullptr)
+        {
+          std::cout << acentuar << "El valor proporcionado no está en el arbol." << std::endl;
+        }
+        else
+        {
+          if (nodo == arbol.obtenerRaiz())
+          {
+            std::cout << "El nodo raíz no tiene hermanos." << std::endl;
+          }
+          else
+          {
+            auto hermano = arbol.obtenerHermano(valor);
+
+            if (hermano == nullptr)
+            {
+              std::cout << "El hermano del nodo es nulo." << std::endl;
+            }
+            else
+            {
+              std::cout << "El valor del hermano es: " << hermano->valor << std::endl;
+            }
+          }
+        }
       }
-       esperarEnter(); 
+      esperarEnter();
       break;
-      
+
     case 7:
-    //Hallar el padre de un nodo N
-      esperarEnter(); 
+      //Halla el padre de un nodo N
+      if (arbol.estaVacio())
+      {
+        std::cout << acentuar << "El árbol está vacío." << terminarColor << std::endl;
+      }
+      else
+      {
+        int valor;
+        std::cout << "Valor: " << colorVertice;
+        std::cin >> valor;
+        std::cout << terminarColor;
+
+        auto nodo = arbol.buscarNodo(valor);
+        if (nodo == nullptr)
+        {
+          std::cout << acentuar << "El valor proporcionado no está en el arbol." << std::endl;
+        }
+        else
+        {
+          if (nodo == arbol.obtenerRaiz())
+          {
+            std::cout << "El nodo raíz no tiene padre." << std::endl;
+          }
+          else
+          {
+            auto padre = arbol.obtenerPadre(valor);
+
+            if (padre == nullptr)
+            {
+              std::cout << "El padre del nodo es nulo." << std::endl;
+            }
+            else
+            {
+              std::cout << "El valor del padre es: " << padre->valor << std::endl;
+            }
+          }
+        }
+      }
+      esperarEnter();
       break;
-      
+
     case 8:
-    //Lista descendientes de un nodo
-      esperarEnter(); 
+      //Lista descendientes de un nodo
+      if (arbol.estaVacio())
+      {
+        std::cout << acentuar << "El árbol está vacío." << terminarColor << std::endl;
+      }
+      else
+      {
+        int valor;
+        std::cout << "Valor: " << colorVertice;
+        std::cin >> valor;
+        std::cout << terminarColor;
+
+        if (arbol.buscarNodo(valor) == nullptr)
+        {
+          std::cout << acentuar << "El nodo no existe." << terminarColor << std::endl;
+        }
+        else
+        {
+          // Encontrar los descendientes del nodo
+          auto recorrido = arbol.obtenerDescendientes(valor);
+
+          if (recorrido.estaVacia())
+          {
+            std::cout << "El nodo no tiene descendientes." << std::endl;
+          }
+          else
+          {
+            std::cout << "Los descendientes del nodo son: "
+                      << colorVertice << enNegritas;
+            for (auto nodo : recorrido)
+            {
+              std::cout << nodo->valor << ' ';
+            }
+
+            std::cout << terminarColor << std::endl;
+          }
+        }
+      }
+      esperarEnter();
       break;
-      
+
     case 9:
-    //Lista un camino de un nodo N a un nodo M
-      esperarEnter(); 
+
       break;
-      
+
     case 10:
-    //Calcula la altura del arbol
-      esperarEnter(); 
+      //Calcula la altura del arbol
+      if (arbol.estaVacio())
+      {
+        std::cout << acentuar << "El árbol está vacío." << terminarColor << std::endl;
+      }
+      else
+      {
+        int valor;
+        std::cout << "Valor: " << colorVertice;
+        std::cin >> valor;
+        std::cout << terminarColor;
+
+        if (arbol.buscarNodo(valor) == nullptr)
+        {
+          std::cout << acentuar << "El nodo no existe." << std::endl;
+        }
+        else
+        {
+          int altura = arbol.obtenerAltura(valor);
+          std::cout << "La altura del nodo es: " << colorVertice << altura << terminarColor << std::endl;
+        }
+      }
+      esperarEnter();
       break;
 
     case 11:
-    //Calcula el peso del arbol
-      esperarEnter(); 
+      //Calcula el peso del arbol
+      if (arbol.estaVacio())
+      {
+        std::cout << acentuar << "El árbol está vacío." << terminarColor << std::endl;
+      }
+      else
+      {
+        int peso = arbol.obtenerPeso();
+        std::cout << "El peso del árbol es: " << enNegritas << colorVertice << peso << terminarColor << std::endl;
+      }
+      esperarEnter();
       break;
-       
-    case 12:
-    //Determina si el arbol es lleno
 
-    
-      esperarEnter(); 
+    case 12:
+      //Determina si el arbol es lleno
+      if (arbol.estaVacio())
+      {
+        std::cout << acentuar << "El árbol está vacío." << terminarColor << std::endl;
+      }
+      else
+      {
+        if (arbol.esLleno() == true)
+        {
+          std::cout << enNegritas << colorVertice << "El arbol es lleno." << terminarColor << std::endl;
+        }
+        else
+        {
+          std::cout << enNegritas << acentuar << "El arbol no es lleno." << terminarColor << std::endl;
+        }
+      }
+      esperarEnter();
       break;
     case 13:
       // Para evitar el siguiente mensaje
