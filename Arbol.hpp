@@ -219,6 +219,16 @@ class Arbol
     }
 
     /**
+     * Obtiene el camino entre dos nodos, si estos existen
+     */
+    Lista<NodoArbol<T> *> obtenerCamino(T valor1, T valor2) 
+    {
+      Lista<NodoArbol<T> *> resultado;
+
+      return resultado;
+    }
+
+    /**
      * Obtiene la altura desde un nodo
      */
     int obtenerAltura(T valor)
