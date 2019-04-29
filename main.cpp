@@ -62,7 +62,7 @@ int main()
               << "  8. Lista descendientes de un nodo.\n"
               << "  9. Camino de un nodo N a un nodo M.\n"
               << " 10. Altura de un nodo.\n"
-              << " 711. Peso del árbol.\n"
+              << " 11. Peso del árbol.\n"
               << " 12. ¿Es un árbol lleno?\n"
               << " 13. Salir.\n"
               << std::endl;
@@ -339,7 +339,60 @@ int main()
       break;
 
     case 9:
+      if (arbol.estaVacio())
+      {
+        std::cout << acentuar << "El árbol está vacío." << terminarColor << std::endl;
+      }
+      else
+      {
+        int valor1, valor2;
+        std::cout << "Valor 1: " << colorVertice;
+        std::cin >> valor1;
+        std::cout << terminarColor;
 
+        if (arbol.buscarNodo(valor1) == nullptr) 
+        {
+          std::cout << acentuar << "El nodo no existe." << terminarColor << std::endl;
+        }
+        else
+        {
+          std::cout << "Valor 2: " << colorVertice;
+          std::cin >> valor2;
+          std::cout << terminarColor;
+
+          if (arbol.buscarNodo(valor2) == nullptr)
+          {
+            std::cout << acentuar << "El nodo no existe." << terminarColor << std::endl;
+          }
+          else if (valor1 == valor2)
+          {
+            std::cout << "Se introdujo el mismo nodo de origen que de destino." << std::endl;
+          }
+          else
+          {
+            // Encontrar los descendientes del nodo
+            auto recorrido = arbol.obtenerCamino(valor1, valor2);
+
+            if (recorrido.estaVacia())
+            {
+              std::cout << "No existe camino entre los valores especificados. (Lo cual es raro :( ))" << std::endl;
+            }
+            else
+            {
+              std::cout << "El camino entre los nodos es: ";
+              for (auto nodo : recorrido)
+              {
+                std::cout << colorVertice << enNegritas << nodo->valor << terminarColor;
+                if (nodo->valor != valor2)
+                  std::cout << enNegritas << " -> ";
+              }
+
+              std::cout << terminarColor << std::endl;
+            }
+          }
+        }
+      }
+      esperarEnter();
       break;
 
     case 10:

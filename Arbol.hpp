@@ -221,11 +221,35 @@ class Arbol
     /**
      * Obtiene el camino entre dos nodos, si estos existen
      */
-    Lista<NodoArbol<T> *> obtenerCamino(T valor1, T valor2) 
+    Lista<NodoArbol<T> *> obtenerCamino(T valor1, T valor2)
     {
-      Lista<NodoArbol<T> *> resultado;
+      auto nodo1 = buscarNodo(valor1);
+      auto nodo2 = buscarNodo(valor2);
 
-      return resultado;
+      if (nodo1 != nullptr && nodo2 != nullptr)
+      {
+        auto minimoComunAncestro = obtenerMinimoComunAncestro(raiz, nodo1, nodo2);
+
+        if (minimoComunAncestro != nullptr) 
+        {
+          auto camino1 = obtenerCaminoAncestroDescendiente(minimoComunAncestro, nodo1);
+          auto camino2 = obtenerCaminoAncestroDescendiente(minimoComunAncestro, nodo2);
+
+          if (!camino1.estaVacia() && !camino2.estaVacia() && camino1.frente->dato == camino2.frente->dato)
+            camino2.eliminarInicio();
+
+          return camino1.reversa().concatenar(camino2);
+        }
+        else
+        {
+          // Algo salío mal si llegamos aquí
+          return {};
+        }
+      }
+      else
+      {
+        return {};
+      }
     }
 
     /**
@@ -449,6 +473,106 @@ class Arbol
         return 0;
       } else {
         return std::max(obtenerAltura(nodo->izquierda), obtenerAltura(nodo->derecha)) + 1;
+      }
+    }
+
+    /**
+     * Devuelve verdadero si el nodo es un ancestro del nodo especificado
+     */
+    bool esAncestroDe(NodoArbol<T> *ancestro, NodoArbol<T> *nodo) 
+    {
+      return ancestro != nullptr && (
+              ancestro == nodo || ancestro->izquierda == nodo || ancestro->derecha == nodo ||
+              esAncestroDe(ancestro->izquierda, nodo) || esAncestroDe(ancestro->derecha, nodo)
+            );
+    }
+
+    /**
+     * Devuelve el mínimo común ancestro de dos nodos, comenzando con el nodo especificado.
+     */
+    NodoArbol<T> *obtenerMinimoComunAncestro(NodoArbol<T> *actual, NodoArbol<T> *nodo1, NodoArbol<T> *nodo2)
+    {
+      if (actual == nullptr || !(esAncestroDe(actual, nodo1) && esAncestroDe(actual, nodo2)))
+      {
+        return nullptr;
+      }
+      else
+      {
+        auto menorIzquierda = obtenerMinimoComunAncestro(actual->izquierda, nodo1, nodo2);
+
+        if (menorIzquierda != nullptr)
+        {
+          return menorIzquierda;
+        }
+        else
+        {
+          auto menorDerecha = obtenerMinimoComunAncestro(actual->derecha, nodo1, nodo2);
+
+          if (menorDerecha != nullptr)
+          {
+            return menorDerecha;
+          }
+          else
+          {
+            return actual;
+          }
+          
+        }
+      }
+      
+    }
+
+    /**
+     * Encuentra un camino entre ancestro y descendiente
+     */
+    Lista<NodoArbol<T> *> obtenerCaminoAncestroDescendiente(NodoArbol<T> *ancestro, NodoArbol<T> *descendiente)
+    {
+      if (ancestro == descendiente)
+        return {};
+
+      Lista<NodoArbol<T> *> resultado;
+      resultado.insertarInicio(ancestro);
+      obtenerCaminoAncestroDescendiente(ancestro, descendiente, resultado);
+      return resultado.reversa();
+    }
+
+    /**
+     * Encuentra un camino entre ancestro y descendiente
+     */
+    bool obtenerCaminoAncestroDescendiente(NodoArbol<T> *actual, NodoArbol<T> *descendiente,
+                                           Lista<NodoArbol<T> *> &resultado)
+    {
+      if (actual == descendiente)
+      {
+        return true;
+      }
+      else if (actual == nullptr)
+      {
+        return false;
+      }
+      else
+      {
+        resultado.insertarInicio(actual->izquierda);
+
+        if (obtenerCaminoAncestroDescendiente(actual->izquierda, descendiente, resultado))
+        {
+          return true;
+        }
+        else
+        {
+          resultado.eliminarInicio();
+          resultado.insertarInicio(actual->derecha);
+
+          if (obtenerCaminoAncestroDescendiente(actual->derecha, descendiente, resultado))
+          {
+            return true;
+          }
+          else
+          {
+            resultado.eliminarInicio();
+            return false;
+          }
+        }
       }
     }
 };

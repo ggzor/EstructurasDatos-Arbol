@@ -434,6 +434,30 @@ public:
 
   Nodo<T> *frente = nullptr;
   Nodo<T> *atras = nullptr;
+
+  /**
+   * Obtiene la reversa de una lista
+   */
+  Lista<T> reversa() const {
+    Lista<T> resultado;
+
+    for (auto valor : *this)
+      resultado.insertarInicio(valor);
+
+    return resultado;
+  }
+
+  /**
+   * Concatena una lista con otra
+   */
+  Lista<T> concatenar(const Lista<T> &otra) const {
+    Lista<T> resultado{*this};
+
+    for (auto valor : otra)
+      resultado.insertarFinal(valor);
+
+    return resultado;
+  }
 };
 
 #endif // _LISTA_HPP_
